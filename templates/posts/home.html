@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="social-layout">
+
+    <section class="stories-card">
+
+        {% if user.is_authenticated %}
+            {% if my_story %}
+                <div class="story-own-wrap">
+                    <a href="{% url 'story_detail' my_story.id %}" class="story-item">
+                        <img src="{{ my_story.image.url }}" class="story-avatar-img">
+                        <small>Your Story</small>
+                    </a>
+                    <a href="{% url 'create_story' %}" class="story-plus-mini">+</a>
+                </div>
+            {% else %}
+                <a href="{% url 'create_story' %}" class="story-item">
+                    <div class="story-avatar add-story">+</div>
+                    <small>Add Story</small>
+                </a>
+            {% endif %}
+        {% endif %}
+
+        {% for story in stories %}
+            <a href="{% url 'story_detail' story.id %}" class="story-item">
+                <img src="{{ story.image.url }}" class="story-avatar-img">
+                <small>{{ story.user.username }}</small>
+            </a>
+        {% endfor %}
+
+    </section>
+
+    <div class="feed-top">
+        <h3>Home Feed</h3>
+        {% if user.is_authenticated %}
+            <a href="{% url 'create_post' %}" class="create-post-btn">+ Post</a>
+        {% endif %}
+    </div>
+
+    {% for post in posts %}
+
+        <article class="insta-post">
+
+            <div class="insta-post-header">
+                <a href="{% url 'user_profile' post.author.username %}" class="post-user">
+                    {% if post.author.profile.profile_picture and post.author.profile.profile_picture.name != "default.png" %}
+                        <img src="{{ post.author.profile.profile_picture.url }}" class="story-avatar-img">
+                    {% else %}
+                        <div class="story-avatar small">{{ post.author.username|first|upper }}</div>
+                    {% endif %}
+
+                    <div>
+                        <strong>@{{ post.author.username }}</strong>
+                        <span>{{ post.created_at|timesince }} ago</span>
+                    </div>
+                </a>
+
+                {% if post.author == user %}
+                    <div class="post-menu-actions">
+                        <a href="{% url 'edit_post' post.id %}">Edit</a>
+                        <a href="{% url 'delete_post' post.id %}">Delete</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if post.image %}
+                <a href="{% url 'post_detail' post.id %}" class="post-image-wrapper">
+                    <img src="{{ post.image.url }}"
+                         class="insta-post-img double-like-img"
+                         data-post-id="{{ post.id }}">
+                    <div class="heart-animation" id="heart-{{ post.id }}">❤️</div>
+                </a>
+            {% endif %}
+
+            <div class="insta-actions">
+
+                <button class="like-btn"
+                        data-post-id="{{ post.id }}"
+                        data-url="{% url 'like_post' post.id %}">
+                    ❤️ <span id="like-count-{{ post.id }}">{{ post.total_likes }}</span>
+                </button>
+
+                <a href="{% url 'post_detail' post.id %}" class="comment-link">
+                    💬 {{ post.comments.count }}
+                </a>
+
+                <button class="save-btn"
+                        data-post-id="{{ post.id }}"
+                        data-url="{% url 'save_post' post.id %}">
+                    🔖
+                </button>
+
+                <button
+    class="share-btn"
+    data-url="{% url 'post_detail' post.id %}"
+    onclick="sharePost(this.dataset.url)">
+    📤 Share
+</button>
+
+            </div>
+
+            <p class="post-caption">
+                <strong>@{{ post.author.username }}</strong>
+                {{ post.caption }}
+            </p>
+
+            <div class="comments-area">
+                {% for comment in post.comments.all|slice:":2" %}
+                    <div class="comment-line">
+                        <strong>@{{ comment.author.username }}</strong>
+                        {{ comment.text }}
+                    </div>
+                {% endfor %}
+
+                {% if post.comments.count > 2 %}
+                    <a href="{% url 'post_detail' post.id %}" class="view-comments">
+                        View all {{ post.comments.count }} comments
+                    </a>
+                {% endif %}
+            </div>
+
+        </article>
+
+    {% empty %}
+        <div class="empty-feed">
+            <h4>No posts yet</h4>
+            <p>Follow users to see their posts here.</p>
+            <a href="{% url 'create_post' %}">Create Post</a>
+        </div>
+    {% endfor %}
+
+</div>
+
+<script>
+document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        fetch(this.dataset.url, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById(`like-count-${this.dataset.postId}`).innerText = data.total_likes;
+            this.classList.toggle('liked', data.liked);
+        });
+    });
+});
+
+document.querySelectorAll('.save-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        fetch(this.dataset.url, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.classList.toggle('saved', data.saved);
+            this.innerText = data.saved ? "🔖 Saved" : "🔖";
+        });
+    });
+});
+
+document.querySelectorAll(".double-like-img").forEach(img => {
+    img.addEventListener("dblclick", function (e) {
+        e.preventDefault();
+        const id = this.dataset.postId;
+        const heart = document.getElementById("heart-" + id);
+
+        if (heart) {
+            heart.classList.add("show");
+            setTimeout(() => heart.classList.remove("show"), 700);
+        }
+
+        const likeButton = document.querySelector('[data-post-id="' + id + '"].like-btn');
+        if (likeButton) likeButton.click();
+    });
+});
+
+function sharePost(link) {
+    navigator.clipboard.writeText(link);
+    alert("Post link copied!");
+}
+function sharePost(url) {
+    const fullUrl = window.location.origin + url;
+
+    if (navigator.share) {
+        navigator.share({
+            title: "SocialHub Post",
+            url: fullUrl
+        });
+    } else {
+        navigator.clipboard.writeText(fullUrl);
+        alert("Post link copied!");
+    }
+}
+</script>
+
+{% endblock %}

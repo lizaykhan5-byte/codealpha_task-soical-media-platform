@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'home' %}" class="back-home-btn">← Home</a>
+
+<div class="post-detail-card">
+
+    <div class="insta-post-header">
+        <a href="{% url 'user_profile' post.author.username %}" class="post-user">
+            {% if post.author.profile.profile_picture and post.author.profile.profile_picture.name != "default.png" %}
+                <img src="{{ post.author.profile.profile_picture.url }}" class="story-avatar-img">
+            {% else %}
+                <div class="story-avatar small">{{ post.author.username|first|upper }}</div>
+            {% endif %}
+
+            <div>
+                <strong>@{{ post.author.username }}</strong>
+                <span>{{ post.created_at|timesince }} ago</span>
+            </div>
+        </a>
+
+        {% if post.author == user %}
+            <div class="post-menu-actions">
+                <a href="{% url 'edit_post' post.id %}">Edit</a>
+                <a href="{% url 'delete_post' post.id %}">Delete</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if post.image %}
+        <img src="{{ post.image.url }}" class="post-detail-img">
+    {% endif %}
+
+    <div class="insta-actions">
+        <button class="like-btn" data-post-id="{{ post.id }}" data-url="{% url 'like_post' post.id %}">
+            ❤️ <span id="like-count-{{ post.id }}">{{ post.total_likes }}</span>
+        </button>
+
+        <button class="save-btn" data-url="{% url 'save_post' post.id %}">
+            🔖 Save
+        </button>
+
+        <button class="share-btn" data-url="{% url 'post_detail' post.id %}">
+            📤 Share
+        </button>
+    </div>
+
+    <p class="post-caption">
+        <strong>@{{ post.author.username }}</strong>
+        {{ post.caption }}
+    </p>
+
+    <hr>
+
+    <h5>Comments</h5>
+
+    {% for comment in post.comments.all %}
+        <div class="comment-line">
+            <strong>@{{ comment.author.username }}</strong>
+            {{ comment.text }}
+        </div>
+    {% empty %}
+        <p class="text-muted">No comments yet.</p>
+    {% endfor %}
+
+    <form method="POST" action="{% url 'add_comment' post.id %}" class="comment-form mt-3">
+        {% csrf_token %}
+        {{ comment_form.text }}
+        <button type="submit">Send</button>
+    </form>
+
+</div>
+
+<script>
+document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        fetch(this.dataset.url, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById(`like-count-${this.dataset.postId}`).innerText = data.total_likes;
+            this.classList.toggle('liked', data.liked);
+        });
+    });
+});
+
+document.querySelectorAll('.save-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        fetch(this.dataset.url, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.classList.toggle('saved', data.saved);
+            this.innerText = data.saved ? "🔖 Saved" : "🔖 Save";
+        });
+    });
+});
+
+function sharePost(link) {
+    navigator.clipboard.writeText(link);
+    alert("Post link copied!");
+}
+</script>
+
+{% endblock %}

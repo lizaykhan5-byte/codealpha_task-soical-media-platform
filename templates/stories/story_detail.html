@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="story-viewer-page">
+
+    <a href="{% url 'home' %}" class="story-close-btn">×</a>
+
+    <div class="story-card-final">
+
+        <div class="story-progress-group">
+            {% for s in active_stories %}
+                <div class="story-progress">
+                    <div class="story-progress-fill
+                        {% if s.id == story.id %}active{% elif s.created_at < story.created_at %}done{% endif %}">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="story-header-final">
+            {% if story.user.profile.profile_picture and story.user.profile.profile_picture.name != "default.png" %}
+                <img src="{{ story.user.profile.profile_picture.url }}" class="story-header-img">
+            {% else %}
+                <div class="story-header-avatar">
+                    {{ story.user.username|first|upper }}
+                </div>
+            {% endif %}
+
+            <div>
+                <h5>@{{ story.user.username }}</h5>
+                <small>{{ story.created_at|timesince }} ago</small>
+            </div>
+        </div>
+
+        <div class="story-media-box">
+
+            {% if previous_story %}
+                <a href="{% url 'story_detail' previous_story.id %}" class="story-tap left"></a>
+            {% endif %}
+
+            <img src="{{ story.image.url }}" class="story-main-img">
+
+            {% if next_story %}
+                <a href="{% url 'story_detail' next_story.id %}" class="story-tap right"></a>
+            {% endif %}
+
+        </div>
+
+        {% if story.caption %}
+            <p class="story-caption-final">{{ story.caption }}</p>
+        {% endif %}
+
+        {% if story.user != user %}
+            <div class="story-actions-final">
+
+                <form method="POST" class="story-react-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="react">
+                    <input type="hidden" name="emoji" value="❤️">
+                    <button type="submit">❤️</button>
+                </form>
+
+                <form method="POST" class="story-reply-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="reply">
+                    <input type="text" name="reply" placeholder="Reply to story..." required>
+                    <button type="submit">Send</button>
+                </form>
+
+            </div>
+        {% endif %}
+
+        {% if story.user == user %}
+            <div class="story-viewers-box">
+                <strong>👁 Seen by {{ viewers.count }}</strong>
+
+                {% for viewer in viewers %}
+                    <div class="story-viewer-user">@{{ viewer.username }}</div>
+                {% empty %}
+                    <small class="text-muted">No views yet.</small>
+                {% endfor %}
+            </div>
+
+            <a href="{% url 'delete_story' story.id %}"
+               class="btn btn-danger mt-3 w-100"
+               onclick="return confirm('Delete this story?')">
+                Delete Story
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+const nextStoryUrl = "{% if next_story %}{% url 'story_detail' next_story.id %}{% else %}{% url 'home' %}{% endif %}";
+
+setTimeout(function () {
+    window.location.href = nextStoryUrl;
+}, 5000);
+</script>
+
+{% endblock %}
+

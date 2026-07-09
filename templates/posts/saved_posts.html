@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'profile' %}" class="back-home-btn">← Profile</a>
+
+<div class="profile-card">
+    <h3 class="mb-4">🔖 Saved Posts</h3>
+
+    <div class="profile-grid">
+        {% for post in posts %}
+            <a href="{% url 'post_detail' post.id %}" class="profile-post">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Saved post">
+                {% endif %}
+                <div class="profile-overlay">
+                    <span>❤️ {{ post.total_likes }}</span>
+                    <span>💬 {{ post.comments.count }}</span>
+                </div>
+            </a>
+        {% empty %}
+            <div class="text-center w-100">
+                <h5>No Saved Posts</h5>
+                <p>Saved posts will appear here.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

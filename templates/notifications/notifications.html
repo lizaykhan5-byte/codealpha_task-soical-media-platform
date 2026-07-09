@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'home' %}" class="back-home-btn">← Home</a>
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">🔔 Notifications</h3>
+
+    {% for req in follow_requests %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <strong>@{{ req.sender.username }}</strong>
+                sent you a follow request.
+
+                <div class="d-flex gap-2 mt-3">
+
+                    <a href="{% url 'accept_follow_request' req.id %}"
+                       class="btn btn-success btn-sm">
+                        Accept
+                    </a>
+
+                    <a href="{% url 'reject_follow_request' req.id %}"
+                       class="btn btn-danger btn-sm">
+                        Reject
+                    </a>
+
+                </div>
+
+                <small class="text-muted">
+                    {{ req.created_at|timesince }} ago
+                </small>
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+    {% for notification in notifications %}
+
+        {% if notification.notification_type != "follow" %}
+
+            <div class="card mb-3">
+                <div class="card-body">
+
+                    {% if notification.notification_type == "like" %}
+                        ❤️ <strong>@{{ notification.sender.username }}</strong>
+                        liked your post.
+
+                    {% elif notification.notification_type == "comment" %}
+                        💬 <strong>@{{ notification.sender.username }}</strong>
+                        commented on your post.
+                    {% endif %}
+
+                    <br>
+
+                    <small class="text-muted">
+                        {{ notification.created_at|timesince }} ago
+                    </small>
+
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+    {% if not follow_requests and not notifications %}
+        <div class="alert alert-info">
+            No notifications yet.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

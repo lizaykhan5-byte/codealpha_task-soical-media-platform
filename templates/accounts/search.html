@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+
+        <div class="card post-card p-4 mb-4">
+            <h3 class="fw-bold mb-3">Search Users</h3>
+
+            <form method="GET">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control"
+                           placeholder="Search by username..."
+                           value="{{ query|default:'' }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
+        {% if query %}
+            <h5 class="fw-bold mb-3">Results for "{{ query }}"</h5>
+
+            {% for u in users %}
+                <div class="card post-card p-3 mb-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{{ u.profile.profile_picture.url }}"
+                             class="rounded-circle"
+                             width="55" height="55"
+                             style="object-fit: cover;">
+
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-0">@{{ u.username }}</h6>
+                            <small class="text-muted">{{ u.email }}</small>
+                        </div>
+
+                        <a href="{% url 'user_profile' u.username %}"
+                           class="btn btn-sm btn-outline-primary rounded-pill">
+                            View
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="card post-card p-4 text-center">
+                    <p class="text-muted mb-0">No users found.</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

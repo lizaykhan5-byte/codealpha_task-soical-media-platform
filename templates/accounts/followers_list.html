@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'user_profile' profile_user.username %}" class="back-home-btn">
+    ← Back
+</a>
+
+<div class="messenger-container">
+
+    <div class="messenger-header">
+        <h2>@{{ profile_user.username }}'s Followers</h2>
+    </div>
+
+    {% for follower in followers %}
+
+        <a href="{% url 'user_profile' follower.user.username %}"
+           class="conversation-card text-decoration-none">
+
+            <div class="conversation-left">
+
+                {% if follower.user.profile.profile_picture and follower.user.profile.profile_picture.name != "default.png" %}
+                    <img src="{{ follower.user.profile.profile_picture.url }}"
+                         class="conversation-avatar">
+                {% else %}
+                    <div class="conversation-avatar-text">
+                        {{ follower.user.username|first|upper }}
+                    </div>
+                {% endif %}
+
+                <div class="conversation-info">
+                    <h5>@{{ follower.user.username }}</h5>
+                </div>
+
+            </div>
+
+        </a>
+
+    {% empty %}
+
+        <div class="empty-chat-list">
+            <h4>No followers yet.</h4>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

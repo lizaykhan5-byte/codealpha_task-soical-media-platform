@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'home' %}" class="back-home-btn">
+    ← Back to Home
+</a>
+<div class="row justify-content-center">
+
+    <div class="col-lg-7 col-md-8">
+
+        <div class="card post-card p-4">
+
+            <div class="text-center mb-4">
+
+                {% if user.profile.cover_photo %}
+                    <img src="{{ user.profile.cover_photo.url }}"
+                         class="img-fluid rounded-4 mb-3"
+                         style="width:100%;height:220px;object-fit:cover;">
+                {% endif %}
+
+                <img src="{{ user.profile.profile_picture.url }}"
+                     class="rounded-circle border border-4 border-white shadow"
+                     width="120"
+                     height="120"
+                     style="margin-top:-70px;object-fit:cover;">
+
+                <h3 class="fw-bold mt-3">
+                    Edit Profile
+                </h3>
+
+                <small class="text-muted">
+                    @{{ user.username }}
+                </small>
+
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Username
+                    </label>
+
+                    {{ u_form.username }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Email
+                    </label>
+
+                    {{ u_form.email }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Cover Photo
+                    </label>
+
+                    {{ p_form.cover_photo }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Profile Picture
+                    </label>
+
+                    {{ p_form.profile_picture }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Bio
+                    </label>
+
+                    {{ p_form.bio }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Location
+                    </label>
+
+                    {{ p_form.location }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Website
+                    </label>
+
+                    {{ p_form.website }}
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary w-100 rounded-pill">
+
+                    Save Changes
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'home' %}" class="back-home-btn">← Home</a>
+
+<div class="messenger-layout">
+
+    <aside class="chat-list-panel">
+        <a href="{% url 'inbox' %}" class="back-chat">← Back to Inbox</a>
+    </aside>
+
+    <section class="chat-window">
+
+        <div class="chat-top">
+            {% if receiver.profile.profile_picture and receiver.profile.profile_picture.name != "default.png" %}
+                <img src="{{ receiver.profile.profile_picture.url }}" class="story-avatar-img">
+            {% else %}
+                <div class="story-avatar small">
+                    {{ receiver.username|first|upper }}
+                </div>
+            {% endif %}
+
+            <div>
+                <h5>@{{ receiver.username }}</h5>
+
+                {% if receiver.profile.is_online %}
+                    <small style="color:#22c55e;">🟢 Active Now</small>
+                {% else %}
+                    <small style="color:#6b7280;">⚫ Offline</small>
+                {% endif %}
+            </div>
+
+            <div class="ms-auto">
+                {% if is_blocked_by_me %}
+                    <a href="{% url 'unblock_user' receiver.username %}" class="btn btn-sm btn-success">
+                        Unblock
+                    </a>
+                {% else %}
+                    <a href="{% url 'block_user' receiver.username %}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('Block this user?')">
+                        Block
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            {% for msg in messages %}
+                <div class="msg-row {% if msg.sender == user %}me{% else %}them{% endif %}">
+                    <div class="msg-bubble">
+
+                        {% if msg.image %}
+                            <img src="{{ msg.image.url }}" class="chat-image">
+                        {% endif %}
+
+                        {% if msg.body %}
+                            <p class="mb-1">{{ msg.body }}</p>
+                        {% endif %}
+
+                        <span>
+                            {{ msg.created_at|date:"h:i A" }}
+
+                            {% if msg.sender == user %}
+                                · {% if msg.is_read %}Seen{% else %}Sent{% endif %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-chat" id="emptyChat">
+                    <h5>No messages yet</h5>
+                    <p>Say hello 👋</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="typingIndicator" class="typing-indicator"></div>
+
+        {% if is_blocked_by_me %}
+
+            <div class="blocked-chat-box">
+                You blocked @{{ receiver.username }}.
+                <a href="{% url 'unblock_user' receiver.username %}">Unblock</a>
+            </div>
+
+        {% elif has_blocked_me %}
+
+            <div class="blocked-chat-box">
+                You cannot message this user.
+            </div>
+
+        {% else %}
+
+            <div class="emoji-bar">
+                <button type="button" onclick="addEmoji('❤️')">❤️</button>
+                <button type="button" onclick="addEmoji('😂')">😂</button>
+                <button type="button" onclick="addEmoji('🔥')">🔥</button>
+                <button type="button" onclick="addEmoji('😍')">😍</button>
+                <button type="button" onclick="addEmoji('👍')">👍</button>
+            </div>
+
+            <form class="chat-input" id="chatForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <label class="image-upload-btn">
+                    📷
+                    <input type="file" name="image" id="imageInput" accept="image/*" hidden>
+                </label>
+
+                <input type="text"
+                       name="body"
+                       id="messageInput"
+                       placeholder="Write a message..."
+                       autocomplete="off">
+
+                <button type="submit">➤</button>
+            </form>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{{ receiver.username|json_script:"receiver-username" }}
+{{ user.username|json_script:"current-username" }}
+
+<script>
+const receiverUsername = JSON.parse(document.getElementById("receiver-username").textContent);
+const currentUsername = JSON.parse(document.getElementById("current-username").textContent);
+
+const chatMessages = document.getElementById("chatMessages");
+const chatForm = document.getElementById("chatForm");
+const messageInput = document.getElementById("messageInput");
+const imageInput = document.getElementById("imageInput");
+const typingIndicator = document.getElementById("typingIndicator");
+
+let typingTimer;
+
+if (chatMessages) {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+
+const chatSocket = new WebSocket(
+    protocol + "://" + window.location.host + "/ws/chat/" + receiverUsername + "/"
+);
+
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+
+    if (data.type === "typing") {
+        if (data.sender !== currentUsername && data.is_typing === true) {
+            typingIndicator.innerText = "✍️ " + data.sender + " is typing...";
+        } else {
+            typingIndicator.innerText = "";
+        }
+        return;
+    }
+
+    const emptyChat = document.getElementById("emptyChat");
+    if (emptyChat) emptyChat.remove();
+
+    const row = document.createElement("div");
+    row.classList.add("msg-row");
+
+    if (data.sender === currentUsername) {
+        row.classList.add("me");
+    } else {
+        row.classList.add("them");
+    }
+
+    row.innerHTML = `
+        <div class="msg-bubble">
+            <p class="mb-1">${data.message}</p>
+            <span>${data.created_at}</span>
+        </div>
+    `;
+
+    chatMessages.appendChild(row);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+if (messageInput) {
+    messageInput.addEventListener("input", function () {
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                type: "typing",
+                is_typing: true
+            }));
+        }
+
+        clearTimeout(typingTimer);
+
+        typingTimer = setTimeout(function () {
+            if (chatSocket.readyState === WebSocket.OPEN) {
+                chatSocket.send(JSON.stringify({
+                    type: "typing",
+                    is_typing: false
+                }));
+            }
+        }, 1000);
+    });
+}
+
+if (chatForm) {
+    chatForm.addEventListener("submit", function(e) {
+        const message = messageInput.value.trim();
+        const hasImage = imageInput && imageInput.files.length > 0;
+
+        if (hasImage) {
+            return;
+        }
+
+        e.preventDefault();
+
+        if (message !== "" && chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                message: message
+            }));
+
+            messageInput.value = "";
+
+            chatSocket.send(JSON.stringify({
+                type: "typing",
+                is_typing: false
+            }));
+        }
+    });
+}
+
+function addEmoji(emoji) {
+    if (messageInput) {
+        messageInput.value += emoji;
+        messageInput.focus();
+    }
+}
+</script>
+
+{% endblock %}

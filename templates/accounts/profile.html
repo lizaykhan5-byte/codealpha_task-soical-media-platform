@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'home' %}" class="back-home-btn">← Home</a>
+
+<div class="profile-card">
+
+    <div class="profile-cover">
+        {% if user.profile.cover_photo %}
+            <img src="{{ user.profile.cover_photo.url }}" class="cover-img">
+        {% endif %}
+    </div>
+
+    <div class="text-center profile-main">
+
+        {% if user.profile.profile_picture and user.profile.profile_picture.name != "default.png" %}
+            <img src="{{ user.profile.profile_picture.url }}" class="profile-main-img">
+        {% else %}
+            <div class="story-avatar mx-auto">
+                {{ user.username|first|upper }}
+            </div>
+        {% endif %}
+
+        <h2 class="mt-3">@{{ user.username }}</h2>
+
+        {% if user.profile.bio %}
+            <p>{{ user.profile.bio }}</p>
+        {% else %}
+            <p class="text-muted">No bio added yet.</p>
+        {% endif %}
+
+        <div class="profile-stats">
+            <div>
+                <h5>{{ user.posts.count }}</h5>
+                <small>Posts</small>
+            </div>
+
+            <a href="{% url 'followers_list' user.username %}" class="profile-stat-link">
+                <h5>{{ user.followers.count }}</h5>
+                <small>Followers</small>
+            </a>
+
+            <a href="{% url 'following_list' user.username %}" class="profile-stat-link">
+                <h5>{{ user.profile.following.count }}</h5>
+                <small>Following</small>
+            </a>
+        </div>
+
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+                Edit Profile
+            </a>
+
+            <a href="{% url 'saved_posts' %}" class="btn btn-outline-primary">
+                🔖 Saved
+            </a>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Posts</h4>
+        <a href="{% url 'create_post' %}" class="btn btn-primary btn-sm">+ Post</a>
+    </div>
+
+    <div class="profile-grid">
+        {% for post in user.posts.all %}
+            <a href="{% url 'post_detail' post.id %}" class="profile-post">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Post image">
+                {% endif %}
+
+                <div class="profile-overlay">
+                    <span>❤️ {{ post.total_likes }}</span>
+                    <span>💬 {{ post.comments.count }}</span>
+                </div>
+            </a>
+        {% empty %}
+            <div class="text-center w-100">
+                <h5>No Posts Yet</h5>
+                <p>Create your first post.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
