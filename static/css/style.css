@@ -1740,3 +1740,629 @@ textarea{
     -ms-user-select:text;
     user-select:text;
 }
+.insta-post{
+    max-width:520px;
+    margin:18px auto;
+    border-radius:18px;
+    padding:12px;
+}
+
+.post-image-wrapper{
+    height:360px;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.insta-post-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.insta-post-header{
+    margin-bottom:10px;
+}
+
+.insta-actions{
+    margin-top:10px;
+}
+
+.post-caption{
+    margin-top:8px;
+    font-size:15px;
+}
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.profile-post{
+    height:210px;
+    border-radius:14px;
+    overflow:hidden;
+    position:relative;
+}
+
+.profile-post img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.post-detail-card{
+    max-width:520px;
+    margin:20px auto;
+    padding:14px;
+}
+
+.post-detail-card img{
+    max-height:420px;
+    width:100%;
+    object-fit:cover;
+    border-radius:16px;
+}
+.story-avatar-img{
+    width:65px;
+    height:65px;
+}
+/* ==================================================
+   FINAL COMPACT UI (HOME + PROFILE + POST DETAIL)
+================================================== */
+
+/* Disable text selection */
+body{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+input,
+textarea{
+    user-select:text;
+}
+
+/* ================= HOME FEED ================= */
+
+.insta-post{
+    max-width:480px;
+    margin:16px auto;
+    padding:12px;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.post-image-wrapper{
+    width:100%;
+    height:300px;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.insta-post-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.insta-post-header{
+    padding-bottom:8px;
+}
+
+.insta-actions{
+    padding:10px 0 4px;
+    display:flex;
+    gap:18px;
+    align-items:center;
+}
+
+.post-caption{
+    font-size:14px;
+    margin-top:6px;
+}
+
+.comment-line{
+    font-size:13px;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:18px;
+}
+
+.profile-post{
+    height:165px;
+    overflow:hidden;
+    border-radius:14px;
+    position:relative;
+}
+
+.profile-post img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.3s;
+}
+
+.profile-post:hover img{
+    transform:scale(1.05);
+}
+
+/* ================= POST DETAIL ================= */
+
+.post-detail-card{
+    max-width:500px;
+    margin:18px auto;
+    padding:14px;
+    border-radius:18px;
+}
+
+.post-detail-img{
+    width:100%;
+    height:420px;
+    object-fit:contain;
+    background:#000;
+    border-radius:16px;
+}
+
+/* ================= STORIES ================= */
+
+.story-avatar-img{
+    width:62px;
+    height:62px;
+}
+
+.story-item small{
+    margin-top:6px;
+    font-size:12px;
+}
+
+/* ================= BUTTONS ================= */
+
+.like-btn,
+.share-btn,
+.save-btn{
+    font-size:14px;
+    font-weight:700;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .insta-post{
+        max-width:100%;
+    }
+
+    .post-image-wrapper{
+        height:260px;
+    }
+
+    .profile-post{
+        height:120px;
+    }
+
+    .post-detail-img{
+        height:320px;
+    }
+}
+/* ===== FINAL OVERRIDE - COMPACT SOCIALHUB UI ===== */
+
+.app-main{
+    width:min(560px, 94%);
+}
+
+.insta-post{
+    max-width:460px !important;
+    margin:16px auto !important;
+    padding:10px !important;
+    border-radius:18px !important;
+}
+
+.post-image-wrapper{
+    height:280px !important;
+    overflow:hidden !important;
+    border-radius:14px !important;
+}
+
+.insta-post-img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    border-radius:14px !important;
+}
+
+.insta-post-header{
+    padding:8px 4px !important;
+}
+
+.insta-actions{
+    padding:8px 4px !important;
+    gap:16px !important;
+}
+
+.post-caption{
+    padding:0 4px !important;
+    font-size:14px !important;
+}
+
+.comments-area{
+    padding:0 4px 8px !important;
+}
+
+.profile-grid{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:8px !important;
+}
+
+.profile-post{
+    height:145px !important;
+    border-radius:12px !important;
+}
+
+.profile-post img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+}
+
+.post-detail-card{
+    max-width:480px !important;
+    padding:12px !important;
+}
+
+.post-detail-img{
+    height:380px !important;
+    object-fit:contain !important;
+    background:#000 !important;
+}
+
+body{
+    user-select:none;
+}
+
+input,
+textarea{
+    user-select:text;
+}
+/* Home Feed */
+
+.post-image-wrapper{
+    height:220px !important;
+}
+
+.insta-post-img{
+    height:220px !important;
+    object-fit:cover !important;
+}
+
+/* Profile */
+
+.profile-post{
+    height:130px !important;
+}
+
+.profile-post img{
+    height:130px !important;
+    object-fit:cover !important;
+}
+
+/* Post Detail */
+
+.post-detail-img{
+    max-height:320px !important;
+    object-fit:contain !important;
+}
+.post-image-wrapper{
+    height:260px !important;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+.insta-post-img{
+    width:100%;
+    height:100%;
+    object-fit:contain !important;
+}
+/* ================= AUTH PAGES FINAL ================= */
+
+.auth-page,
+.row.justify-content-center.mt-5,
+.row.justify-content-center{
+    min-height: calc(100vh - 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card.shadow,
+.card.shadow.border-0{
+    width: 100%;
+    max-width: 430px;
+    border-radius: 28px !important;
+    border: none !important;
+    box-shadow: 0 18px 45px rgba(0,0,0,.10) !important;
+    background: rgba(255,255,255,.95) !important;
+}
+
+.card-body{
+    padding: 34px 36px !important;
+}
+
+.card-body h3{
+    font-size: 34px;
+    font-weight: 900;
+    margin-bottom: 32px !important;
+    text-align: center;
+}
+
+.card-body .form-label{
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.card-body .form-control{
+    height: 54px;
+    border-radius: 22px;
+    border: 1.5px solid #f9b8d4;
+    background: #fff;
+    padding: 0 18px;
+    font-size: 17px;
+}
+
+.card-body .form-control:focus{
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 4px rgba(139,92,246,.18);
+}
+
+.card-body .btn{
+    height: 54px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 800;
+    margin-top: 10px;
+    background: linear-gradient(135deg,#ff5ea8,#9b5cff,#55c7ff);
+    border: none;
+}
+
+.card-body p{
+    font-size: 18px;
+    text-align: center;
+    margin-top: 26px;
+}
+
+.card-body p a{
+    font-weight: 800;
+    color: #111827;
+}
+
+@media(max-width:600px){
+    .card.shadow,
+    .card.shadow.border-0{
+        max-width: 92%;
+    }
+
+    .card-body{
+        padding: 28px 24px !important;
+    }
+}
+/* ===========================
+   AUTH PAGE FINAL
+=========================== */
+
+.row.justify-content-center,
+.row.justify-content-center.mt-5{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card.shadow,
+.card.shadow.border-0{
+    width:100%;
+    max-width:540px !important;   /* width zyada */
+    border:none !important;
+    border-radius:24px !important;
+    box-shadow:0 15px 40px rgba(0,0,0,.10) !important;
+    overflow:hidden;
+}
+
+.card-body{
+    padding:28px 42px !important;   /* height kam */
+}
+
+.card-body h3{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:20px !important;
+}
+
+.card-body .mb-3{
+    margin-bottom:16px !important;
+}
+
+.card-body .form-label{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.card-body .form-control{
+    height:50px;
+    border-radius:30px;
+    border:1px solid #f3b4d0;
+    padding:0 18px;
+    font-size:16px;
+    transition:.3s;
+}
+
+.card-body .form-control:focus{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 4px rgba(139,92,246,.15);
+}
+
+.card-body .btn{
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg,#ff5fa2,#8b5cf6,#58b7ff);
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    margin-top:10px;
+}
+
+.card-body p{
+    margin-top:18px;
+    margin-bottom:0;
+    text-align:center;
+    font-size:16px;
+}
+
+.card-body a{
+    font-weight:700;
+    text-decoration:none;
+}
+
+.card-body a:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:768px){
+
+    .card.shadow,
+    .card.shadow.border-0{
+        max-width:95% !important;
+    }
+
+    .card-body{
+        padding:24px;
+    }
+
+    .card-body h3{
+        font-size:34px;
+    }
+}
+/* ===========================
+   AUTH PAGES PROFESSIONAL FIX
+=========================== */
+
+body:has(.auth-card),
+body:has(.card.shadow){
+    overflow-x:hidden;
+}
+
+.row.justify-content-center,
+.row.justify-content-center.mt-5{
+    min-height:100vh !important;
+    width:100% !important;
+    margin:0 !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+}
+
+.row.justify-content-center > [class*="col-"]{
+    width:100% !important;
+    max-width:520px !important;
+    flex:0 0 520px !important;
+}
+
+.card.shadow,
+.card.shadow.border-0{
+    width:100% !important;
+    max-width:520px !important;
+    border:none !important;
+    border-radius:26px !important;
+    background:#fff !important;
+    box-shadow:0 20px 45px rgba(0,0,0,.10) !important;
+}
+
+.card-body{
+    padding:30px 42px !important;
+}
+
+.card-body h3{
+    font-size:36px !important;
+    line-height:1.1 !important;
+    font-weight:900 !important;
+    margin-bottom:24px !important;
+    white-space:nowrap !important;
+    text-align:center !important;
+}
+
+.card-body .form-label{
+    font-size:16px !important;
+    font-weight:800 !important;
+    margin-bottom:7px !important;
+}
+
+.card-body .mb-3{
+    margin-bottom:15px !important;
+}
+
+.card-body .form-control{
+    width:100% !important;
+    height:48px !important;
+    border-radius:18px !important;
+    border:1.5px solid #f9b8d4 !important;
+    background:#fff !important;
+    padding:0 16px !important;
+    font-size:16px !important;
+}
+
+.card-body .form-control:focus{
+    border-color:#8b5cf6 !important;
+    box-shadow:0 0 0 4px rgba(139,92,246,.18) !important;
+}
+
+.card-body .btn{
+    height:48px !important;
+    border:none !important;
+    border-radius:999px !important;
+    background:linear-gradient(135deg,#ff5ea8,#9b5cff,#55c7ff) !important;
+    color:white !important;
+    font-size:17px !important;
+    font-weight:800 !important;
+    margin-top:6px !important;
+}
+
+.card-body p{
+    margin-top:18px !important;
+    margin-bottom:0 !important;
+    font-size:16px !important;
+    text-align:center !important;
+}
+
+.card-body p a{
+    color:#111827 !important;
+    font-weight:800 !important;
+}
+
+@media(max-width:600px){
+    .row.justify-content-center > [class*="col-"]{
+        max-width:92% !important;
+        flex:0 0 92% !important;
+    }
+
+    .card-body{
+        padding:26px 24px !important;
+    }
+
+    .card-body h3{
+        font-size:30px !important;
+        white-space:normal !important;
+    }
+}

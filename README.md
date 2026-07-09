@@ -140,16 +140,41 @@ http://127.0.0.1:8000/
 
 # 📸 Screenshots
 
-- Login
-- Register
-- Home Feed
-- Stories
-- Profile
-- Chat
-- Notifications
-- Saved Posts
+## Screenshots
 
-(Add screenshots here)
+### Login
+![Login](screenshots/login.png)
+
+### Register
+![Register](screenshots/register.png)
+
+### Home Feed
+![Home Feed](screenshots/Post.png)
+
+### Stories
+![Stories](screenshots/story.png)
+
+### Inbox
+![Inbox](screenshots/Inbox.png)
+
+### Chat Room
+![Chat Room](screenshots/chat_room.png)
+
+### Notifications
+![Notifications](screenshots/Notification.png)
+
+### User Profile
+![Profile](screenshots/Userprofile.png)
+
+### Followers
+![Followers](screenshots/Userfollower.png)
+
+### Following
+![Following](screenshots/Userfollowing.png)
+
+### Side Menu
+![Side Menu](screenshots/Sidemenu.png)
+
 
 # 🔮 Future Improvements
 
