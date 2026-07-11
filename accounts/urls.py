@@ -19,7 +19,11 @@ path(
     name="login"
 ),
     
-
+    path(
+    "verify-email/<str:token>/",
+    views.verify_email,
+    name="verify_email"
+),
     path(
         "logout/",
         auth_views.LogoutView.as_view(),

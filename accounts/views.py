@@ -3,6 +3,10 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
+from django.core import signing
+from django.core.mail import send_mail
+from django.urls import reverse
 
 from notifications.models import Notification
 from .models import FollowRequest
@@ -10,19 +14,99 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Account created successfully!")
-            return redirect("home")
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+
+            token = signing.dumps(
+                {"user_id": user.pk},
+                salt="email-verification"
+            )
+
+            verification_url = request.build_absolute_uri(
+                reverse(
+                    "verify_email",
+                    kwargs={"token": token}
+                )
+            )
+
+            send_mail(
+                subject="Verify your SocialHub account",
+                message=(
+                    f"Hello @{user.username},\n\n"
+                    "Click the link below to verify your SocialHub account:\n\n"
+                    f"{verification_url}\n\n"
+                    "This verification link expires in 24 hours."
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            messages.success(
+                request,
+                "Account created. Check your email to verify your account."
+            )
+
+            return redirect("login")
     else:
         form = UserRegisterForm()
 
-    return render(request, "accounts/register.html", {"form": form})
+    return render(
+        request,
+        "accounts/register.html",
+        {"form": form}
+    )
 
+def verify_email(request, token):
+    try:
+        data = signing.loads(
+            token,
+            salt="email-verification",
+            max_age=60 * 60 * 24
+        )
+
+        user = get_object_or_404(
+            User,
+            pk=data["user_id"]
+        )
+
+    except signing.SignatureExpired:
+        messages.error(
+            request,
+            "Verification link has expired."
+        )
+        return redirect("login")
+
+    except signing.BadSignature:
+        messages.error(
+            request,
+            "Invalid verification link."
+        )
+        return redirect("login")
+
+    if not user.is_active:
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+
+        messages.success(
+            request,
+            "Email verified successfully. You can now log in."
+        )
+    else:
+        messages.info(
+            request,
+            "Your email is already verified."
+        )
+
+    return redirect("login")
 
 @login_required
 def profile(request):
