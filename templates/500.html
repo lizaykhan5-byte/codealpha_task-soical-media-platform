@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-card">
+        <div class="error-code">500</div>
+        <h1>Something Went Wrong</h1>
+        <p>An unexpected server error occurred. Please try again later.</p>
+
+        <a href="{% url 'home' %}" class="error-btn">
+            Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}
