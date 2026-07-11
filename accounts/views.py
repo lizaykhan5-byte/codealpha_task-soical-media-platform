@@ -77,6 +77,13 @@ def verify_email(request, token):
             User,
             pk=data["user_id"]
         )
+       messages.success(
+    request,
+    "Account created successfully! Please verify your email before logging in. "
+    "Check your inbox and spam folder."
+)
+
+return redirect("login") 
 
     except signing.SignatureExpired:
         messages.error(

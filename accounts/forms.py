@@ -113,7 +113,6 @@ class UserRegisterForm(UserCreationForm):
 
         return password
 
-
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -130,6 +129,14 @@ class UserLoginForm(AuthenticationForm):
             "autocomplete": "current-password",
         })
     )
+
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError(
+                "Your account is not verified yet. Please check your email "
+                "inbox and spam folder.",
+                code="inactive",
+            )
 
 
 class UserUpdateForm(forms.ModelForm):
