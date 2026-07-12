@@ -6,12 +6,11 @@ from django.core.exceptions import ValidationError
 import re
 
 from .models import Profile
-
-
 class UserRegisterForm(UserCreationForm):
     username = forms.CharField(
         min_length=3,
         max_length=30,
+        label="Username",
         widget=forms.TextInput(attrs={
             "class": "form-control",
             "placeholder": "Enter username",
@@ -21,6 +20,7 @@ class UserRegisterForm(UserCreationForm):
 
     email = forms.EmailField(
         required=True,
+        label="Email",
         widget=forms.EmailInput(attrs={
             "class": "form-control",
             "placeholder": "Enter email",
@@ -28,7 +28,9 @@ class UserRegisterForm(UserCreationForm):
         })
     )
 
-    password = forms.CharField(
+    # UserCreationForm ka existing password1 field override kiya hai
+    password1 = forms.CharField(
+        label="Password",
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
             "placeholder": "Enter strong password",
@@ -36,7 +38,9 @@ class UserRegisterForm(UserCreationForm):
         })
     )
 
-    confirmpassword = forms.CharField(
+    # UserCreationForm ka existing password2 field override kiya hai
+    password2 = forms.CharField(
+        label="Confirm Password",
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
             "placeholder": "Confirm password",
@@ -46,7 +50,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password", "confirmpassword"]
+        fields = ["username", "email", "password1", "password2"]
 
     def clean_username(self):
         username = self.cleaned_data.get("username", "").strip()
@@ -83,8 +87,8 @@ class UserRegisterForm(UserCreationForm):
 
         return email
 
-    def clean_password(self):
-        password = self.cleaned_data.get("password", "")
+    def clean_password1(self):
+        password = self.cleaned_data.get("password1", "")
 
         if len(password) < 8:
             raise ValidationError(
