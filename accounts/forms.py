@@ -36,7 +36,7 @@ class UserRegisterForm(UserCreationForm):
         })
     )
 
-    confirm password = forms.CharField(
+    confirmpassword = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
             "placeholder": "Confirm password",
@@ -46,7 +46,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password", "confirm password"]
+        fields = ["username", "email", "password", "confirmpassword"]
 
     def clean_username(self):
         username = self.cleaned_data.get("username", "").strip()
