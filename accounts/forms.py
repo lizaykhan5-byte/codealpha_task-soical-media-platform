@@ -28,7 +28,7 @@ class UserRegisterForm(UserCreationForm):
         })
     )
 
-    password1 = forms.CharField(
+    password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
             "placeholder": "Enter strong password",
@@ -36,7 +36,7 @@ class UserRegisterForm(UserCreationForm):
         })
     )
 
-    password2 = forms.CharField(
+    confirm password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "form-control",
             "placeholder": "Confirm password",
@@ -46,7 +46,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["username", "email", "password", "confirm password"]
 
     def clean_username(self):
         username = self.cleaned_data.get("username", "").strip()
@@ -83,8 +83,8 @@ class UserRegisterForm(UserCreationForm):
 
         return email
 
-    def clean_password1(self):
-        password = self.cleaned_data.get("password1", "")
+    def clean_password(self):
+        password = self.cleaned_data.get("password", "")
 
         if len(password) < 8:
             raise ValidationError(
