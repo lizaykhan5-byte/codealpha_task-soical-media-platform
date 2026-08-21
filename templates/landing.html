@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="landing-page">
+
+    <!-- NAVBAR -->
+    <nav class="landing-navbar">
+
+        <a href="{% url 'home' %}" class="landing-brand">
+            <span class="landing-logo">
+                <svg viewBox="0 0 24 24" width="22" height="22"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round">
+                    <circle cx="8" cy="8" r="3"></circle>
+                    <circle cx="16" cy="9" r="2.5"></circle>
+                    <path d="M3 19c0-3 2.2-5 5-5s5 2 5 5"></path>
+                    <path d="M13 15c.8-.7 1.8-1 3-1 2.5 0 4.5 1.8 4.5 4.5"></path>
+                </svg>
+            </span>
+
+            <span>SocialHub</span>
+        </a>
+
+        <div class="landing-nav-actions">
+            <a href="{% url 'login' %}" class="landing-login">
+                Login
+            </a>
+
+            <a href="{% url 'register' %}" class="landing-register">
+                Create account
+            </a>
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="landing-hero">
+
+        <div class="landing-copy">
+
+            <div class="landing-badge">
+                ✦ Your social space
+            </div>
+
+            <h1>
+                Connect.
+                <span>Share.</span>
+                Stay closer.
+            </h1>
+
+            <p class="landing-description">
+                Share moments, connect with friends and have
+                meaningful conversations — all in one place.
+            </p>
+
+            <div class="landing-buttons">
+                <a href="{% url 'register' %}"
+                   class="landing-primary-btn">
+                    Get started
+                    <span>→</span>
+                </a>
+
+                <a href="{% url 'login' %}"
+                   class="landing-secondary-btn">
+                    I already have an account
+                </a>
+            </div>
+
+            <div class="landing-features">
+
+                <div>
+                    <span>01</span>
+                    <p>Share Posts</p>
+                </div>
+
+                <div>
+                    <span>02</span>
+                    <p>Stories</p>
+                </div>
+
+                <div>
+                    <span>03</span>
+                    <p>Private Chat</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREVIEW -->
+        <div class="landing-visual">
+
+            <div class="social-preview-card">
+
+                <div class="preview-top">
+                    <div class="preview-user">
+                        <div class="preview-avatar">S</div>
+
+                        <div>
+                            <strong>SocialHub</strong>
+                            <small>Share your moments</small>
+                        </div>
+                    </div>
+
+                    <span>•••</span>
+                </div>
+
+                <div class="preview-photo">
+
+                    <div class="preview-center-icon">
+                        <svg viewBox="0 0 24 24"
+                             width="36" height="36"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7">
+                            <path d="M12 21s-7-4.4-9.5-9C.5 8.4 2.4 5 6 5c2 0 3.4 1 4 2 1-1.3 2.4-2 4-2 3.6 0 5.5 3.4 3.5 7-2.5 4.6-9.5 9-9.5 9Z"/>
+                        </svg>
+                    </div>
+
+                </div>
+
+                <div class="preview-actions">
+                    <span>♡</span>
+                    <span>○</span>
+                    <span>⌁</span>
+                </div>
+
+                <div class="preview-text">
+                    <strong>Connect with people you care about.</strong>
+                    <small>
+                        Create posts, share stories and start conversations.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="floating-card floating-story">
+                <span>+</span>
+                New story
+            </div>
+
+            <div class="floating-card floating-message">
+                <span>♡</span>
+                New message
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1704,3 +1704,23 @@ textarea.form-control {
     width: 100% !important;
     max-width: 520px !important;
 }
+.auth-page > [class*="col-"] {
+    width: 100% !important;
+    max-width: 570px !important;
+    flex: 0 0 570px !important;
+}
+
+.auth-page .card {
+    width: 100% !important;
+    max-width: 570px !important;
+}
+.auth-page > [class*="col-"] {
+    width: 100% !important;
+    max-width: 500px !important;
+    flex: 0 0 500px !important;
+}
+
+.auth-page .card {
+    width: 100% !important;
+    max-width: 500px !important;
+}
