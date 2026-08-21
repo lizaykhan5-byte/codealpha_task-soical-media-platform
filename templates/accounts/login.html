@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row justify-content-center mt-5 auth-page"></div>
+
+<div class="row justify-content-center mt-5 auth-page">
+
     <div class="col-md-5">
         <div class="card shadow border-0">
             <div class="card-body p-4">
@@ -19,32 +21,46 @@
 
                     {% for field in form %}
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">{{ field.label }}</label>
+
+                            <label class="form-label fw-semibold">
+                                {{ field.label }}
+                            </label>
+
                             {{ field }}
 
                             {% for error in field.errors %}
-                                <small class="text-danger d-block">{{ error }}</small>
+                                <small class="text-danger d-block">
+                                    {{ error }}
+                                </small>
                             {% endfor %}
+
                         </div>
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit"
+                            class="btn btn-primary w-100">
                         Login
                     </button>
+
                 </form>
 
-<p class="text-center mt-3">
-    <a href="{% url 'password_reset' %}">
-        Forgot Password?
-    </a>
-</p>
+                <p class="text-center mt-3">
+                    <a href="{% url 'password_reset' %}">
+                        Forgot Password?
+                    </a>
+                </p>
+
                 <p class="text-center mt-3">
                     Don’t have an account?
-                    <a href="{% url 'register' %}">Register</a>
+                    <a href="{% url 'register' %}">
+                        Register
+                    </a>
                 </p>
 
             </div>
         </div>
     </div>
+
 </div>
+
 {% endblock %}
