@@ -24,9 +24,8 @@
     <meta name="robots"
           content="index, follow">
 
-    <!-- Open Graph Preview -->
-    <meta property="og:type"
-          content="website">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
 
     <meta property="og:title"
           content="{% block og_title %}SocialHub — Connect, Share and Chat{% endblock %}">
@@ -40,7 +39,7 @@
     <meta property="og:image"
           content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/socialhub-preview.png' %}">
 
-    <!-- Twitter Preview -->
+    <!-- Twitter -->
     <meta name="twitter:card"
           content="summary_large_image">
 
@@ -61,128 +60,268 @@
     <link rel="apple-touch-icon"
           href="{% static 'images/favicon.png' %}">
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
+    <!-- Custom CSS -->
     <link rel="stylesheet"
-          href="{% static 'css/style.css' %}?v=110">
+          href="{% static 'css/style.css' %}?v=111">
 </head>
 
 <body>
 
-{% if request.resolver_match.url_name != "login" and request.resolver_match.url_name != "register" %}
+
+<!-- ========================================
+     APP NAVBAR
+     Only visible after login
+======================================== -->
+
+{% if user.is_authenticated %}
 
 <nav class="app-navbar">
-    <a href="{% url 'home' %}" class="app-logo">SocialHub</a>
 
-    <form method="GET" action="{% url 'search_users' %}" class="app-search">
-        <input type="search" name="q" placeholder="Search users...">
+    <a href="{% url 'home' %}"
+       class="app-logo">
+        SocialHub
+    </a>
+
+    <form method="GET"
+          action="{% url 'search_users' %}"
+          class="app-search">
+
+        <input type="search"
+               name="q"
+               placeholder="Search users...">
     </form>
 
     <div class="top-icons">
-        <a href="{% url 'inbox' %}" class="top-icon notify-icon">
+
+        <a href="{% url 'inbox' %}"
+           class="top-icon notify-icon">
+
             💬
+
             {% if unread_messages > 0 %}
                 <span>{{ unread_messages }}</span>
             {% endif %}
+
         </a>
 
-        <a href="{% url 'notifications' %}" class="top-icon notify-icon">
+        <a href="{% url 'notifications' %}"
+           class="top-icon notify-icon">
+
             ❤️
+
             {% if unread_notifications > 0 %}
                 <span>{{ unread_notifications }}</span>
             {% endif %}
+
         </a>
 
-        <button class="hamburger-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu">
+        <button class="hamburger-btn"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sideMenu">
+
             ☰
+
         </button>
+
     </div>
+
 </nav>
 
-<div class="offcanvas offcanvas-end custom-menu" tabindex="-1" id="sideMenu">
+
+<!-- ========================================
+     SIDE MENU
+======================================== -->
+
+<div class="offcanvas offcanvas-end custom-menu"
+     tabindex="-1"
+     id="sideMenu">
 
     <div class="offcanvas-header">
-        <h5 class="fw-bold">SocialHub</h5>
-        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+        <h5 class="fw-bold">
+            SocialHub
+        </h5>
+
+        <button class="btn-close"
+                data-bs-dismiss="offcanvas">
+        </button>
+
     </div>
 
     <div class="offcanvas-body">
 
-        {% if user.is_authenticated %}
-            <div class="menu-user-card mb-4">
-                {% if user.profile.profile_picture and user.profile.profile_picture.name != "default.png" %}
-                    <img src="{{ user.profile.profile_picture.url }}" class="menu-profile-img">
-                {% else %}
-                    <div class="story-avatar small">
-                        {{ user.username|first|upper }}
-                    </div>
-                {% endif %}
-                <div>
-                    <strong>@{{ user.username }}</strong>
-                   
+
+        <!-- USER -->
+
+        <div class="menu-user-card mb-4">
+
+            {% if user.profile.profile_picture and user.profile.profile_picture.name != "default.png" %}
+
+                <img src="{{ user.profile.profile_picture.url }}"
+                     class="menu-profile-img">
+
+            {% else %}
+
+                <div class="story-avatar small">
+                    {{ user.username|first|upper }}
                 </div>
+
+            {% endif %}
+
+            <div>
+                <strong>
+                    @{{ user.username }}
+                </strong>
             </div>
-        {% endif %}
 
-        <a href="{% url 'home' %}" class="menu-link">🏠 Home</a>
-        <a href="{% url 'create_post' %}" class="menu-link">➕ Create Post</a>
-        <a href="{% url 'create_story' %}" class="menu-link">📸 Add Story</a>
-        <a href="{% url 'search_users' %}" class="menu-link">🔍 Search Users</a>
-        <a href="{% url 'profile' %}" class="menu-link">👤 Profile</a>
+        </div>
 
-        <button type="button" onclick="toggleTheme()" class="menu-link theme-menu-btn">
+
+        <!-- MENU LINKS -->
+
+        <a href="{% url 'home' %}"
+           class="menu-link">
+            🏠 Home
+        </a>
+
+        <a href="{% url 'create_post' %}"
+           class="menu-link">
+            ➕ Create Post
+        </a>
+
+        <a href="{% url 'create_story' %}"
+           class="menu-link">
+            📸 Add Story
+        </a>
+
+        <a href="{% url 'search_users' %}"
+           class="menu-link">
+            🔍 Search Users
+        </a>
+
+        <a href="{% url 'profile' %}"
+           class="menu-link">
+            👤 Profile
+        </a>
+
+
+        <!-- THEME -->
+
+        <button type="button"
+                onclick="toggleTheme()"
+                class="menu-link theme-menu-btn">
+
             🌙 Dark / Light Mode
+
         </button>
 
-        <form method="POST" action="{% url 'logout' %}" class="mt-4">
+
+        <!-- LOGOUT -->
+
+        <form method="POST"
+              action="{% url 'logout' %}"
+              class="mt-4">
+
             {% csrf_token %}
-            <button type="submit" class="logout-menu-btn">
+
+            <button type="submit"
+                    class="logout-menu-btn">
+
                 Logout
+
             </button>
+
         </form>
 
     </div>
+
 </div>
 
 {% endif %}
 
-<main class="app-main">
-     {% if messages %}
+
+<!-- ========================================
+     MAIN CONTENT
+======================================== -->
+
+<main class="{% if user.is_authenticated %}app-main{% else %}public-main{% endif %}">
+
+
+    <!-- MESSAGES -->
+
+    {% if messages %}
+
         <div class="messages-container">
+
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show custom-alert"
+
+                <div class="alert alert-{{ message.tags }}
+                            alert-dismissible
+                            fade show
+                            custom-alert"
                      role="alert">
+
                     {{ message }}
 
                     <button type="button"
                             class="btn-close"
                             data-bs-dismiss="alert">
                     </button>
+
                 </div>
+
             {% endfor %}
+
         </div>
+
     {% endif %}
+
+
+    <!-- PAGE CONTENT -->
+
     {% block content %}
     {% endblock %}
+
 </main>
 
+
+<!-- ========================================
+     THEME SCRIPT
+======================================== -->
+
 <script>
+
 function toggleTheme(){
+
     document.body.classList.toggle("dark-mode");
 
     localStorage.setItem(
         "theme",
-        document.body.classList.contains("dark-mode") ? "dark" : "light"
+        document.body.classList.contains("dark-mode")
+            ? "dark"
+            : "light"
     );
 }
 
-if(localStorage.getItem("theme") == "dark"){
+
+if(localStorage.getItem("theme") === "dark"){
+
     document.body.classList.add("dark-mode");
+
 }
+
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 </html>
