@@ -1694,4 +1694,13 @@ textarea.form-control {
         padding: 14px;
     }
 }
-  
+  .auth-page > [class*="col-"] {
+    width: 100% !important;
+    max-width: 520px !important;
+    flex: 0 0 520px !important;
+}
+
+.auth-page .card {
+    width: 100% !important;
+    max-width: 520px !important;
+}
